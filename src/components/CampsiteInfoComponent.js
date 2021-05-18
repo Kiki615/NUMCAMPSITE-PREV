@@ -1,72 +1,65 @@
-import React, { Component } from 'react';
-import { Card, CardImg, CardImgOverlay, CardText, CardBody, CardTitle } from 'reactstrap';
-
-// Do we need campsite.id in div in renderCampsite??
+import React from 'react';
+import { Card, CardImg, CardText, CardBody, CardTitle } from 'reactstrap';
 
 
-class Campsiteinfo extends Component {
-    constructor(props) {
-        super(props);
-        }
 
-        renderCampsite(campsite) {
-            return(
-                <div key={campsite.id} className="col-md-5 m-1"> 
+function RenderCampsite({campsite}) {
 
-                <Card>
-                    <CardImg top src={campsite.image} alt={campsite.name} />
-                    <CardBody>
-                        <CardTitle>{campsite.name}</CardTitle>
-                        <CardText>{campsite.description}</CardText>
-                    </CardBody>
-                </Card>
+    return(
+        <div key={campsite.id} className="col-md-5 m-1"> 
 
-                </div>
-            );
-        }
+            <Card>
+                <CardImg top src={campsite.image} alt={campsite.name} />
+                <CardBody>
+                    <CardTitle>{campsite.name}</CardTitle>
+                    <CardText>{campsite.description}</CardText>
+                </CardBody>
+            </Card>
 
-        renderComments(comments) {
-            if (comments) {
-            return (
-            
-                <div className="col-md-5 m-1">    
-                    <h4>Comments</h4> 
-                    <hr />
-                    {comments.map(comment => <div key={comment.id}>
+        </div>
+    );
+}
+
+function RenderComments({comments}) {
+    if (comments) {
+        return (
+         <div className="col-md-5 m-1">    
+            <h4>Comments</h4> 
+            <hr />
+
+            {comments.map(comment => {
+                return (
+                    <div key={comment.id}>
                         <p>{comment.text}</p>
                         <p>{comment.author}, - {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))}</p>
                     </div>
-                    )}
-                </div>
+                );
+            })}
+        </div>
 
-            ) //return if comments not null
-            }
+        ); //return if comments not null
+    }
 
-                    return <div></div>;
-    
-           
-        }
+    return <div />;
+}
         
 
-        render() {
-                if (this.props.campsite){
-                    return (
-                        <div className = "container">
-                            <div className="row">
-                                {this.renderCampsite(this.props.campsite)}
-                                {this.renderComments(this.props.campsite.comments)}
-                            </div>
-                        </div>
-                        )};
-                
-                    return (
-                        <div></div>
-                        );
-            
-            }
-
+function CampsiteInfo(props) {
+    if (props.campsite) {
+        return (
+            <div className = "container">
+                <div className="row">
+                    <RenderCampsite campsite = {props.campsite} />
+                    <RenderComments comments = {props.campsite.comments} />
+                </div>
+            </div>
+        );
     }
-       
     
+    return <div />;
+    
+}
 
-export default Campsiteinfo;
+       
+
+export default CampsiteInfo;
